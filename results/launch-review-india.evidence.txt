@@ -1,0 +1,92 @@
+## The product brief respondents read
+
+# Bajra Bowl: product concept brief
+
+**Category:** Packaged breakfast / better-for-you foods
+**Market:** India
+**Stage:** Pre-launch concept test (D2C launch planned next quarter)
+
+## One-liner
+
+Bajra Bowl is a 3-minute instant breakfast cup made from pearl millet (bajra),
+sattu and roasted vegetables. A hot, filling Indian breakfast for mornings when
+there is no time to cook.
+
+## The product
+
+- **Preparation:** tear the lid, add hot water to the line, stir, wait 3 minutes.
+  No stove, no cooking, no washing up.
+- **Three variants:** Masala Khichdi, Pudina Upma, Sweet Ragi Porridge
+- **Per cup:** 12 g protein, 6 g fibre, no maida, no palm oil, no added sugar in
+  the savoury variants
+- **Claim on pack:** *"Low glycaemic index, diabetic-friendly breakfast in 3 minutes"*
+- **Shelf life:** 9 months, no refrigeration
+
+## Pricing (proposed)
+
+- **Single cup:** ₹79
+- **Monthly pack (30 cups):** ₹1,899, which works out to ₹63 per cup
+- **First-time trial pack (4 cups):** ₹199
+
+For reference, the same breakfast cooked at home from loose ingredients costs
+roughly ₹15 to ₹25 per serving and takes about 20 minutes.
+
+## Where you would buy it
+
+- Own website, with an optional monthly subscription
+- Quick-commerce apps (10-minute delivery)
+- Not planned for kirana or general trade at launch
+
+## Who we think it is for
+
+Working adults aged 25 to 45 in cities who skip breakfast or eat something fried on
+the way to work, and adults managing blood sugar who have been told to switch to
+millets but find them inconvenient to cook.
+
+## What this survey is probing
+
+- Reaction to the ₹79 single-cup price against a ₹15 to ₹25 home-cooked equivalent
+- Whether the "diabetic-friendly" claim widens the appeal or narrows it
+- Whether an instant cup competes credibly with home-cooked breakfast
+- Whether this is bought for yourself or for someone else in the family
+- Which sales channel feels natural
+- What would actually trigger a first purchase
+
+## Answer distributions (7 respondents)
+
+- overall_interest: 3 = 4; 2 = 1; 4 = 1; 1 = 1
+- q_channel_preference: quick_commerce = 4; local_shop = 2; nowhere = 1
+- q_health_claim_framing: claim_draws_me_in = 5; claim_irrelevant_to_me = 1; claim_distrust = 1
+- q_homemade_substitution: cannot_justify_the_gap = 6; worth_it_only_some_days = 1
+- q_price_centrality: 5 = 5; 4 = 2
+- q_price_threshold: only_on_offer = 3; too_expensive_walk_away = 3; occasional_only = 1
+- q_purchase_target: for_elder_family_member = 4; for_myself = 2; would_not_buy_for_anyone = 1
+- q_trial_trigger: trial_pack_199 = 5; tasted_it_somewhere = 1; nothing_would = 1
+- would_buy_at_launch: false = 6; true = 1
+
+## Who answered
+
+- persona 0174 [bajra-gemma4cloud-n8]: region=South Asia, age_bracket=35-44, gender_identity=Woman, socioeconomic_band=Upper-middle, urbanicity=Rural, economic_motivation=Value-driven, primary_language=English, health_dietary_restriction=None
+- persona 0171 [bajra-gemma4cloud-n8]: region=South Asia, age_bracket=55-64, gender_identity=Woman, socioeconomic_band=Middle, urbanicity=Rural, economic_motivation=Indifferent, primary_language=Bengali, health_dietary_restriction=None
+- persona 0148 [bajra-gemma4cloud-n8]: region=South Asia, age_bracket=18-24, gender_identity=Woman, socioeconomic_band=Lower-middle, urbanicity=Dense urban, economic_motivation=Cost-sensitive, primary_language=Hindi, health_dietary_restriction=None
+- persona 0161 [bajra-gemma4cloud-n8]: region=South Asia, age_bracket=45-54, gender_identity=Woman, socioeconomic_band=Lower-middle, urbanicity=Suburban, economic_motivation=Cost-sensitive, primary_language=Bengali, health_dietary_restriction=None
+- persona 0173 [bajra-gemma4cloud-n8]: region=South Asia, age_bracket=45-54, gender_identity=Man, socioeconomic_band=Middle, urbanicity=Dense urban, economic_motivation=Value-driven, primary_language=Bengali, health_dietary_restriction=None
+- persona 0192 [bajra-gemma4cloud-n8]: region=South Asia, age_bracket=25-34, gender_identity=Man, socioeconomic_band=Low income, urbanicity=Suburban, economic_motivation=Cost-sensitive, primary_language=Hindi, health_dietary_restriction=None
+- persona 0175 [bajra-gemma4cloud-n8]: region=South Asia, age_bracket=65-74, gender_identity=Woman, socioeconomic_band=Low income, urbanicity=Suburban, economic_motivation=Cost-sensitive, primary_language=Bengali, health_dietary_restriction=Ethical
+
+## What they said in their own words
+
+- persona 0174 on q_health_claim_framing (chose claim_draws_me_in): "I value health and security, so a diabetic-friendly option is a big plus. 🥗"
+- persona 0174 on q_homemade_substitution (chose cannot_justify_the_gap): "My income has been trending down, so paying 3x more than home-cooked is just not feasible. 💸"
+- persona 0171 on q_health_claim_framing (chose claim_draws_me_in): "I care about health and managing blood sugar, so a diabetic-friendly option is appealing."
+- persona 0171 on q_homemade_substitution (chose cannot_justify_the_gap): "Paying three times the cost of home-cooked food is simply not justifiable for me."
+- persona 0148 on q_health_claim_framing (chose claim_draws_me_in): "I'm a caregiver for elders, so things that are diabetic-friendly are actually useful for my house. 🙄"
+- persona 0148 on q_homemade_substitution (chose cannot_justify_the_gap): "Paying 3x more just to save a few minutes is wild when I'm on a budget. 💸"
+- persona 0161 on q_health_claim_framing (chose claim_draws_me_in): "As someone managing my health and family, a diabetic-friendly option is very appealing."
+- persona 0161 on q_homemade_substitution (chose cannot_justify_the_gap): "My household income is limited, and paying three times the cost of home-cooked food is not feasible."
+- persona 0173 on q_health_claim_framing (chose claim_draws_me_in): "I manage a chronic condition myself, so health claims regarding blood sugar are very important to me. 🌸"
+- persona 0173 on q_homemade_substitution (chose worth_it_only_some_days): "With two kids and a big household, some mornings are just too chaotic to spend 20 minutes at the stove. 🏃‍♂️"
+- persona 0192 on q_health_claim_framing (chose claim_irrelevant_to_me): "I am not diabetic, so this doesn't change my interest; I just care if it tastes good and is cheap. 🙄"
+- persona 0192 on q_homemade_substitution (chose cannot_justify_the_gap): "Paying three times more for something I can make at home is just not logical for my budget. 💸"
+- persona 0175 on q_health_claim_framing (chose claim_distrust): "I am very skeptical of health claims on packaged foods, especially those claiming to be diabetic-friendly."
+- persona 0175 on q_homemade_substitution (chose cannot_justify_the_gap): "Paying three times the cost of home-cooked food is simply not feasible on my low income."

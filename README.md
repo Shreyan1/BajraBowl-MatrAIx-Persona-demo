@@ -139,7 +139,24 @@ Now the part you have to say out loud before someone else does. The brief is wri
 
 Somebody always asks this, so here it is up front. I wrote them by hand.
 
-There's no tool in the repo that reads a country name and hands you back a cohort, and building one would be guesswork wearing a nicer coat. What I did instead was check every value I typed against `persona/schema/dimensions.json`, which is the schema the dataset is generated from. That matters more than it sounds like it should, because a filter value that doesn't exist matches nothing at all and doesn't complain about it. You get an empty cohort and no error.
+There's no tool that reads a country name and hands you back a cohort, and building one would be guesswork wearing a nicer coat. What I did instead was check every value I typed against the dimension schema. That matters more than it sounds like it should, because a filter value that doesn't exist matches nothing at all and doesn't complain about it. You get an empty cohort and no error.
+
+The schema lives in the MatrAIx repository at `persona/schema/dimensions.json`. So that you don't have to clone MatrAIx just to check a filter, an extract is committed here as [`reference/dimensions-values.json`](reference/dimensions-values.json), holding the id, label, category and legal values for all 1,290 dimensions. Descriptions and phrasing templates are stripped out. The values themselves are untouched.
+
+There's a script for it:
+
+```bash
+python tools/check_markets.py
+```
+
+It reads every file in `task/markets/` and tells you which values don't exist. Typos in these files are almost always capitalisation, so it guesses at what you meant:
+
+```
+bad.json
+    'region' has no value 'India'.
+    unknown dimension 'nonsense_dim'
+    'urbanicity' has no value 'Dense Urban'. Did you mean Dense urban?
+```
 
 The `region` dimension has exactly ten legal values:
 
@@ -174,6 +191,28 @@ There are 40 `cult_<country>` dimensions, graded Native, Lived there, Visited, S
 | Dubai | MENA, 46,991 | ~12,000 | 33% | 9% |
 
 Dubai can't be done properly and I'd rather say so than fudge it. Every number in that row is the worst of the four, and the real problem isn't the numbers. The UAE is around 88% expatriate, so an honest Dubai panel is mostly Indian, Pakistani and Filipino people, and `region: MENA` filters exactly those people out. Build it as a deliberate blend of source-country cohorts and call it a construction rather than a sample.
+
+## Turning the answers into a review
+
+Distributions tell you what happened. They don't tell you what to do about it, and a founder reading `cannot_justify_the_gap = 6` still has to work out whether that kills the product or just the price.
+
+So there's a second tool that hands the evidence to a model and asks for a launch review.
+
+```bash
+python tools/analyst_report.py jobs/bajra-gemma4cloud-n8 \
+  --brief task/input/context.md \
+  --out review.md
+```
+
+It runs in about ten seconds and writes something a startup lead can actually read: a verdict, what's failing and why, what's working, which segment is still worth chasing, and what to do before launch. A sample is committed at [`results/launch-review-india.md`](results/launch-review-india.md).
+
+Two things about it matter more than the output does.
+
+The first is that the script does two jobs and keeps them apart. Pulling the numbers out of the job directories is mechanical and you can check it, which is why `--dump-evidence` exists. Writing the review is a judgement made by a language model, and the report says so in its own header rather than pretending to be analysis.
+
+The second is that I checked it. Every figure in the committed review was verified against `matraix results` by hand: quick commerce 4 of 7, elder purchases 4 against 2 for self, the 6 of 7 who couldn't justify the gap, the three-three price split. Nothing was invented. That won't hold for every run on every model, so check yours too, and if you find drift then the evidence dump is right there next to the report.
+
+The model wandering off into prose instead of JSON is the failure you'll actually hit. Ollama's `format` field is supposed to prevent it and several models ignore it on long prompts, so the script asks again with a blunter instruction and gives up after three tries rather than crashing on the first.
 
 ## Things that will bite you
 
