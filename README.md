@@ -249,6 +249,60 @@ The second is that I checked it. Every figure in the committed review was verifi
 
 The model wandering off into prose instead of JSON is the failure you'll actually hit. Ollama's `format` field is supposed to prevent it and several models ignore it on long prompts, so the script asks again with a blunter instruction and gives up after three tries rather than crashing on the first.
 
+## Pointing it at a live page instead of a brief
+
+The obvious question once this works is whether you can skip writing a brief and just hand it your product page. You can, and it's a different lane rather than a different product.
+
+The survey lane gives each persona a static brief you wrote. The web lane puts them in a container with a real browser and a real URL, lets them go and look, and asks for the same kind of structured decision back. Five modes ship with MatrAIx and they trade cost against fidelity: Playwright drives Chromium through DOM selectors and is the cheap one, browser-use runs a dedicated browser agent loop, Cocoa puts a browser and a shell and files in one container, and CUA is a screenshot loop in a Linux desktop that reads a page closest to how a person does and is slowest by a wide margin.
+
+Two tasks in MatrAIx already point at live commercial pages, so there's a working thing to copy. `application/tasks/web_notion-plan-comparison` sends a persona to Notion's public pricing page and asks which of the four plans they would really pick.
+
+The delta in `task.toml` is small:
+
+```toml
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+network_mode = "public"
+```
+
+The URL is a plain sentence in `input/context.md`, along the lines of "browse the public pricing page at https://yoursite.com/pricing as yourself". Cohort selection doesn't change at all. Same `persona_strategy.json`, same `dimensionFilters`, so the market files in `task/markets/` carry over without an edit.
+
+Budget differently, though. The Notion example allows 900 seconds just to build the browser image and 600 seconds per persona, against roughly eight seconds a head in the survey lane. And your page has to be reachable and readable from inside that container, so anything behind a login, a geo-wall or a consent interstitial gives you a panel of personas with opinions about a consent interstitial.
+
+### Attaching supporting files
+
+There's a trap here worth knowing before you try. In the survey lane the runner reads exactly four files:
+
+| File | What it is |
+|---|---|
+| `instruction.md` | what the respondent is being asked to do |
+| `input/context.md` | the brief they read |
+| `input/questionnaire.yaml` | the instrument |
+| `input/output_schema.md` | optional, the shape of the answer |
+
+Everything else you drop into `input/` is bind-mounted read only at `/app/input` and never opened, because the survey persona is a single model call rather than an agent with a shell. So a positioning doc or a pricing sheet has to end up inside `context.md` itself. There's about 8,000 tokens of room beside the persona for the whole task bundle, roughly six thousand words, which is a real brief and not a brand deck.
+
+The agentic lanes are different. A web or os-app persona has a shell in the container, so it can open `/app/input/whatever.md` if the instruction tells it to.
+
+## Doing this without editing JSON
+
+Everything above is files, because files are what a repo can hand you. There is a UI.
+
+The Playground cockpit carries a persona sampling rail, shared by the survey, web and os-app lanes, and it reads the same 1,290 dimension catalog these files do. You get a search box that matches dimension names and their values, multi-select within a dimension, and a matched count that updates live as you narrow.
+
+Watch that count. It's how you catch the failure this README keeps coming back to, the filter that looks careful and has quietly left you 40 eligible people, before you spend anything on a run.
+
+Sampling sits in the same rail: random, stratified, a single named persona or the whole pool, with allocation, sample size, seed and parallel trials as their own controls. Save a cohort and it lands in `persona/datasets/saved-cohorts/` as a recipe, which re-samples every run, or frozen, which pins the exact people. Freeze before a price retest, or the difference you measure is partly just a different panel.
+
+No sliders, in the sense people usually mean. They're dropdowns, chips and number fields, which I think is right for most of it, since region and diet and income band aren't continuous quantities and a slider would imply an order they don't have. Sample size is the one place a slider would genuinely read better.
+
+Two gaps to know about. The web cockpit has no URL box, so pointing a run at your own page is still a line you edit in `context.md`. And the four files in `task/markets/` are mine rather than a UI feature: the rail builds one cohort against one task at a time, so four markets is four launches there, where the command line fans them out in one go.
+
 ## Things that will bite you
 
 **Cuisine is not nationality.** `cuis_indian = Love` looks like an India filter. Its parents in the graph are dietary restriction and interest in cooking, and region isn't among them. Eight personas in the sample love Indian food and one of them is South Asian.
