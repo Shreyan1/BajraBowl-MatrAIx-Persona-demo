@@ -176,7 +176,7 @@ Somebody always asks this, so here it is up front. I wrote them by hand.
 
 There's no tool that reads a country name and hands you back a cohort, and building one would be guesswork wearing a nicer coat. What I did instead was check every value I typed against the dimension schema. That matters more than it sounds like it should, because a filter value that doesn't exist matches nothing at all and doesn't complain about it. You get an empty cohort and no error.
 
-The schema lives in the MatrAIx repository at `persona/schema/dimensions.json`. So that you don't have to clone MatrAIx just to check a filter, an extract is committed here as [`reference/dimensions-values.json`](reference/dimensions-values.json), holding the id, label, category and legal values for all 1,290 dimensions. Descriptions and phrasing templates are stripped out. The values themselves are untouched.
+The schema lives in the MatrAIx repository at [`persona/schema/dimensions.json`](https://github.com/MatrAIx-ai/MatrAIx-Persona-8B/blob/main/persona/schema/dimensions.json). So that you don't have to clone MatrAIx just to check a filter, an extract is committed here as [`reference/dimensions-values.json`](reference/dimensions-values.json), holding the id, label, category and legal values for all 1,290 dimensions. Descriptions and phrasing templates are stripped out. The values themselves are untouched.
 
 There's a script for it:
 
@@ -255,7 +255,7 @@ The obvious question once this works is whether you can skip writing a brief and
 
 The survey lane gives each persona a static brief you wrote. The web lane puts them in a container with a real browser and a real URL, lets them go and look, and asks for the same kind of structured decision back. Five modes ship with MatrAIx and they trade cost against fidelity: Playwright drives Chromium through DOM selectors and is the cheap one, browser-use runs a dedicated browser agent loop, Cocoa puts a browser and a shell and files in one container, and CUA is a screenshot loop in a Linux desktop that reads a page closest to how a person does and is slowest by a wide margin.
 
-Two tasks in MatrAIx already point at live commercial pages, so there's a working thing to copy. `application/tasks/web_notion-plan-comparison` sends a persona to Notion's public pricing page and asks which of the four plans they would really pick.
+Two tasks in MatrAIx already point at live commercial pages, so there's a working thing to copy. [`application/tasks/web_notion-plan-comparison`](https://github.com/MatrAIx-ai/MatrAIx-Persona-8B/tree/main/application/tasks/web_notion-plan-comparison) sends a persona to Notion's public pricing page and asks which of the four plans they would really pick.
 
 The delta in `task.toml` is small:
 
@@ -293,7 +293,7 @@ The agentic lanes are different. A web or os-app persona has a shell in the cont
 
 Everything above is files, because files are what a repo can hand you. There is a UI.
 
-The Playground cockpit carries a persona sampling rail, shared by the survey, web and os-app lanes, and it reads the same 1,290 dimension catalog these files do. You get a search box that matches dimension names and their values, multi-select within a dimension, and a matched count that updates live as you narrow.
+The [Playground](https://github.com/MatrAIx-ai/MatrAIx-Persona-8B/blob/main/docs/quickstart.md#10-playground--play-tasks-visually) cockpit carries a persona sampling rail, shared by the survey, web and os-app lanes, and it reads the same 1,290 dimension catalog these files do. You get a search box that matches dimension names and their values, multi-select within a dimension, and a matched count that updates live as you narrow.
 
 Watch that count. It's how you catch the failure this README keeps coming back to, the filter that looks careful and has quietly left you 40 eligible people, before you spend anything on a run.
 
