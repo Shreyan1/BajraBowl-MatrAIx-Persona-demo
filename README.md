@@ -225,7 +225,7 @@ There are 40 `cult_<country>` dimensions, graded Native, Lived there, Visited, S
 | UK | Western Europe, 102,594 | ~18,000 | 67% | 14% |
 | Dubai | MENA, 46,991 | ~12,000 | 33% | 9% |
 
-Dubai can't be done properly and I'd rather say so than fudge it. Every number in that row is the worst of the four, and the real problem isn't the numbers. The UAE is around 88% expatriate, so an honest Dubai panel is mostly Indian, Pakistani and Filipino people, and `region: MENA` filters exactly those people out. Build it as a deliberate blend of source-country cohorts and call it a construction rather than a sample.
+Dubai can't be done properly. Every number in that row is the worst of the four, and the real problem isn't the numbers. The UAE is around 88% expatriate, so an honest Dubai panel is mostly Indian, Pakistani and Filipino people, and `region: MENA` filters exactly those people out. Build it as a deliberate blend of source-country cohorts and call it a construction rather than a sample.
 
 ## Turning the answers into a review
 
