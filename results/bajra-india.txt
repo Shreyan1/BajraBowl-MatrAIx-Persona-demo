@@ -1,0 +1,32 @@
+Job: bajra-india
+App: survey
+Path: /Users/shreyanbr/Documents/Github/MatrAIx-Persona-8B/jobs/bajra-india
+Health: 4 trials · 4 ok · 0 error
+Primary: Question overall_interest: 3 50% · 2 25% · 4 25%
+Usage: 26,149 in · 1,627 out
+
+Distributions
+  Question overall_interest (n=4): 3=2, 2=1, 4=1
+  Question q_channel_preference (n=4): quick_commerce=3, local_shop=1
+  Question q_health_claim_framing (n=4): claim_draws_me_in=2, claim_irrelevant_to_me=2
+  Question q_homemade_substitution (n=4): cannot_justify_the_gap=3, worth_it_only_some_days=1
+  Question q_price_centrality (n=4): 5=3, 3=1
+  Question q_price_threshold (n=4): only_on_offer=2, occasional_only=1, too_expensive_walk_away=1
+  Question q_purchase_target (n=4): for_myself=3, for_elder_family_member=1
+  Question q_trial_trigger (n=4): trial_pack_199=4
+  Question would_buy_at_launch (n=4): false=3, true=1
+
+Metrics
+  Trials with answers: 4
+
+Trials
+  survey_bajra-bowl-d2c-launch__3wf7ozz · Anika Das · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__3wf7ozz/artifacts/app/output/survey_result.json
+  survey_bajra-bowl-d2c-launch__KVQhds8 · Priya Sharma · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__KVQhds8/artifacts/app/output/survey_result.json
+  survey_bajra-bowl-d2c-launch__ZSNsYQB · Nisha Iyer · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__ZSNsYQB/artifacts/app/output/survey_result.json
+  survey_bajra-bowl-d2c-launch__jqjat4r · Nisha Iyer · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__jqjat4r/artifacts/app/output/survey_result.json
+
+Notes
+  - Built from jobs/<job>/ on disk, no additional model calls.
+  - Ledger uses result.json; lens prefers verifier/structured_output.json.
+  - lens source: structured_output
+  - schema: MatraixJobResults.v1

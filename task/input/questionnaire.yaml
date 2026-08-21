@@ -1,0 +1,124 @@
+schemaVersion: "1.0"
+id: bajra_bowl_prelaunch_v1
+title: "Bajra Bowl: pre-launch concept survey"
+description: "Price sensitivity, health-claim framing, and home-cooked substitution for an instant millet breakfast cup ahead of a D2C launch in India."
+questions:
+  - id: q_price_threshold
+    prompt: "At ₹79 for a single cup, your reaction is..."
+    type: single_choice
+    construct: price_threshold
+    required: true
+    askConfidence: true
+    options:
+      - id: "fair_buy_regularly"
+        label: "Fair for what it is. I would buy it regularly."
+      - id: "occasional_only"
+        label: "Too much for every day, but fine as an occasional convenience."
+      - id: "only_on_offer"
+        label: "I would only buy it on a discount or a first-order offer."
+      - id: "too_expensive_walk_away"
+        label: "Too expensive. I would not buy it at this price at all."
+
+  - id: q_price_centrality
+    prompt: "The price is the single most important factor in whether I would buy Bajra Bowl."
+    type: likert
+    construct: price_centrality
+    required: true
+    minValue: 1
+    maxValue: 5
+
+  - id: q_health_claim_framing
+    prompt: "The pack says 'low glycaemic index, diabetic-friendly'. How does that land for you?"
+    type: single_choice
+    construct: health_claim_framing
+    required: true
+    askRationale: true
+    options:
+      - id: "claim_draws_me_in"
+        label: "It makes the product more appealing to me personally."
+      - id: "claim_irrelevant_to_me"
+        label: "It does not apply to me, so I ignore it. I would judge it on taste and price."
+      - id: "claim_makes_it_medical"
+        label: "It makes it feel like food for sick people, which puts me off."
+      - id: "claim_distrust"
+        label: "I would not trust a health claim like that on a packaged product."
+
+  - id: q_homemade_substitution
+    prompt: "The same breakfast cooked at home costs about ₹15 to ₹25 and takes 20 minutes. Given that, Bajra Bowl is..."
+    type: single_choice
+    construct: homemade_substitution
+    required: true
+    askRationale: true
+    options:
+      - id: "time_worth_paying_for"
+        label: "Worth it. The 20 minutes I save is worth more to me than the extra money."
+      - id: "worth_it_only_some_days"
+        label: "Worth it only on rushed days, not as a normal breakfast."
+      - id: "packaged_is_a_compromise"
+        label: "Not worth it. Packaged food is a step down from freshly cooked, whatever it costs."
+      - id: "cannot_justify_the_gap"
+        label: "Not worth it. I simply cannot justify paying three times more for the same thing."
+
+  - id: q_purchase_target
+    prompt: "If you did buy Bajra Bowl, who would it mainly be for?"
+    type: single_choice
+    construct: purchase_target
+    required: true
+    options:
+      - id: "for_myself"
+        label: "Myself."
+      - id: "for_elder_family_member"
+        label: "An older family member, especially someone watching their blood sugar."
+      - id: "for_children_or_students"
+        label: "Children or a student in the house."
+      - id: "would_not_buy_for_anyone"
+        label: "I would not buy it for anyone."
+
+  - id: q_channel_preference
+    prompt: "Where would you most naturally buy something like this?"
+    type: single_choice
+    construct: channel_preference
+    required: true
+    options:
+      - id: "quick_commerce"
+        label: "A 10-minute delivery app, one or two cups at a time."
+      - id: "website_subscription"
+        label: "The brand's own website, on a monthly subscription."
+      - id: "local_shop"
+        label: "A local shop, because I want to see it before I buy it."
+      - id: "nowhere"
+        label: "Nowhere. I would not look for this product."
+
+  - id: q_trial_trigger
+    prompt: "What would actually get you to try it the first time?"
+    type: single_choice
+    construct: trial_trigger
+    required: true
+    options:
+      - id: "trial_pack_199"
+        label: "The ₹199 four-cup trial pack."
+      - id: "doctor_or_family_recommendation"
+        label: "A doctor or a family member telling me to switch to millets."
+      - id: "tasted_it_somewhere"
+        label: "Tasting it first, either a sample or someone I know serving it."
+      - id: "nothing_would"
+        label: "Nothing. This is not a product I would try."
+
+  - id: overall_interest
+    prompt: "Overall interest in Bajra Bowl."
+    type: likert
+    construct: overall_interest
+    required: true
+    minValue: 1
+    maxValue: 5
+
+  - id: would_buy_at_launch
+    prompt: "Would you buy Bajra Bowl in its first month on sale?"
+    type: single_choice
+    construct: launch_purchase_intent
+    required: true
+    options:
+      - id: "true"
+        label: "Yes, I would buy it in the first month."
+      - id: "false"
+        label: "No, I would not buy it in the first month."

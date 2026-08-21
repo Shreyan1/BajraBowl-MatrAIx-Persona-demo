@@ -1,0 +1,32 @@
+Job: bajra-uk
+App: survey
+Path: /Users/shreyanbr/Documents/Github/MatrAIx-Persona-8B/jobs/bajra-uk
+Health: 4 trials · 4 ok · 0 error
+Primary: Question overall_interest: 4 75% · 1 25%
+Usage: 16,910 in · 1,614 out
+
+Distributions
+  Question overall_interest (n=4): 4=3, 1=1
+  Question q_channel_preference (n=4): quick_commerce=3, nowhere=1
+  Question q_health_claim_framing (n=4): claim_irrelevant_to_me=4
+  Question q_homemade_substitution (n=4): time_worth_paying_for=2, cannot_justify_the_gap=1, worth_it_only_some_days=1
+  Question q_price_centrality (n=4): 3=2, 2=1, 5=1
+  Question q_price_threshold (n=4): occasional_only=3, too_expensive_walk_away=1
+  Question q_purchase_target (n=4): for_myself=3, would_not_buy_for_anyone=1
+  Question q_trial_trigger (n=4): trial_pack_199=3, nothing_would=1
+  Question would_buy_at_launch (n=4): true=3, false=1
+
+Metrics
+  Trials with answers: 4
+
+Trials
+  survey_bajra-bowl-d2c-launch__H2wtrup · Emma Dubois · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__H2wtrup/artifacts/app/output/survey_result.json
+  survey_bajra-bowl-d2c-launch__ThPoSsb · Marco Rossi · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__ThPoSsb/artifacts/app/output/survey_result.json
+  survey_bajra-bowl-d2c-launch__Y3WYDtD · Clara Müller · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__Y3WYDtD/artifacts/app/output/survey_result.json
+  survey_bajra-bowl-d2c-launch__bBxrmBy · Luka Petrov · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__bBxrmBy/artifacts/app/output/survey_result.json
+
+Notes
+  - Built from jobs/<job>/ on disk, no additional model calls.
+  - Ledger uses result.json; lens prefers verifier/structured_output.json.
+  - lens source: structured_output
+  - schema: MatraixJobResults.v1
