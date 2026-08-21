@@ -10,8 +10,14 @@ a language model, and the report says so on its face.
 
 Nothing here is hardcoded. Change the survey and the review changes with it.
 
+Runs against Ollama by default. Export ZAI_API_KEY and it uses z.ai instead,
+which is worth doing here: the review is a single call, so the slowness that
+rules GLM out for the survey itself does not matter, and it follows the output
+format more reliably.
+
 Usage:
     python tools/analyst_report.py jobs/bajra-gemma4cloud-n8
+    ZAI_API_KEY=... python tools/analyst_report.py jobs/my-job --model glm-4.6
     python tools/analyst_report.py jobs/bajra-india jobs/bajra-uk --label market
     python tools/analyst_report.py jobs/my-job --model gemma3-4b-ctx16k --out review.md
 """
@@ -19,6 +25,7 @@ Usage:
 import argparse
 import collections
 import json
+import os
 import pathlib
 import re
 import sys
@@ -26,6 +33,9 @@ import urllib.error
 import urllib.request
 
 OLLAMA = "http://localhost:11434/api/chat"
+
+# Any OpenAI-compatible endpoint works too. z.ai is the one I tested.
+ZAI = "https://api.z.ai/api/paas/v4/chat/completions"
 
 # What we ask the model to fill in. Ollama enforces this, so we either get
 # something with these keys or we get an error, never half a report.
@@ -271,29 +281,54 @@ def ask_ollama(model, evidence_text, timeout, attempts=3):
         {"role": "system", "content": BRIEFING},
         {"role": "user", "content": evidence_text},
     ]
+    api_key = os.environ.get("ZAI_API_KEY", "")
+    use_zai = bool(api_key)
+    url = ZAI if use_zai else OLLAMA
     last_reply = ""
+
     for attempt in range(1, attempts + 1):
-        payload = {
-            "model": model,
-            "messages": messages,
-            "format": SCHEMA,
-            "stream": False,
-            "options": {"temperature": 0.2 if attempt == 1 else 0.0, "num_ctx": 16384},
-        }
+        temperature = 0.2 if attempt == 1 else 0.0
+        if use_zai:
+            payload = {
+                "model": model,
+                "messages": messages,
+                "temperature": temperature,
+                "max_tokens": 4000,
+                # GLM reasoning models spend their whole budget thinking and
+                # return empty content. Turn it off; the review does not need it.
+                "thinking": {"type": "disabled"},
+            }
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {api_key}",
+            }
+        else:
+            payload = {
+                "model": model,
+                "messages": messages,
+                "format": SCHEMA,
+                "stream": False,
+                "options": {"temperature": temperature, "num_ctx": 16384},
+            }
+            headers = {"Content-Type": "application/json"}
+
         request = urllib.request.Request(
-            OLLAMA,
-            data=json.dumps(payload).encode(),
-            headers={"Content-Type": "application/json"},
+            url, data=json.dumps(payload).encode(), headers=headers
         )
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
                 body = json.loads(response.read())
+        except urllib.error.HTTPError as err:
+            sys.exit(f"{url} returned HTTP {err.code}: {err.read()[:300].decode(errors='replace')}")
         except urllib.error.URLError as err:
-            sys.exit(f"could not reach Ollama at {OLLAMA}: {err}")
+            sys.exit(f"could not reach {url}: {err}")
         if body.get("error"):
-            sys.exit(f"Ollama refused: {body['error']}")
+            sys.exit(f"the provider refused: {body['error']}")
 
-        last_reply = body.get("message", {}).get("content", "")
+        if use_zai:
+            last_reply = body["choices"][0]["message"].get("content") or ""
+        else:
+            last_reply = body.get("message", {}).get("content", "")
         parsed = parse_json(last_reply)
         if parsed is not None and all(key in parsed for key in SCHEMA["required"]):
             return parsed
@@ -345,6 +380,27 @@ def parse_json(content):
         return None
 
 
+# Models like typographic punctuation. It survives copy and paste badly and
+# marks a document as unedited machine output, so flatten it on the way out.
+PUNCTUATION = {
+    "\u2014": ", ",
+    "\u2013": "-",
+    "\u2018": "'",
+    "\u2019": "'",
+    "\u201c": '"',
+    "\u201d": '"',
+    "\u2026": "...",
+    "\u2192": "->",
+    "\u00a0": " ",
+}
+
+
+def flatten_punctuation(text):
+    for fancy, plain in PUNCTUATION.items():
+        text = text.replace(fancy, plain)
+    return text
+
+
 VERDICT_WORDS = {
     "launch": "Launch",
     "launch_with_changes": "Launch, but not as it stands",
@@ -363,54 +419,64 @@ def render(report, evidence, model):
         report["headline"],
         "",
         f"Written by `{model}` from {n} survey responses across "
-        f"{', '.join(f'`{j}`' for j in jobs)}. The numbers are extracted from the "
-        "job output. The judgement is the model's, and it is worth exactly as "
-        "much as you think a small sample and a local model are worth.",
+        f"{', '.join(f'`{j}`' for j in jobs)}. The numbers are pulled out of the "
+        "job output and you can check them. The judgement is the model's, and it "
+        "is worth as much as you think a sample this size and a model like this "
+        "are worth.",
         "",
         "## Where it fails",
         "",
     ]
+    # Only Ollama enforces the schema. Over an OpenAI-compatible endpoint the
+    # model can drop a nested field, and losing a whole report to one missing
+    # key would be a silly way to fail.
+    def field(item, key, fallback=""):
+        value = item.get(key, fallback) if isinstance(item, dict) else str(item)
+        return str(value).strip()
+
     for item in report["failures"]:
         out += [
-            f"### {item['what']} ({item['severity']} severity)",
+            f"### {field(item, 'what', 'Unnamed problem')}"
+            + (f" ({field(item, 'severity')} severity)" if field(item, "severity") else ""),
             "",
-            item["why"],
+            field(item, "why"),
             "",
-            f"*Evidence:* {item['evidence']}",
+            f"*Evidence:* {field(item, 'evidence', 'none given')}",
             "",
         ]
 
     out += ["## What is working", ""]
-    for item in report["strengths"]:
-        out.append(f"- **{item['what']}** {item['evidence']}")
+    for item in report.get("strengths", []):
+        out.append(f"- **{field(item, 'what')}** {field(item, 'evidence')}")
 
     out += ["", "## Where it could still win", ""]
-    for item in report["where_it_can_win"]:
-        out += [
-            f"### {item['segment']}",
-            "",
-            item["reasoning"],
-            "",
-            f"*Do this:* {item['what_to_do']}",
-            "",
-        ]
+    for item in report.get("where_it_can_win", []):
+        out += [f"### {field(item, 'segment', 'Unnamed segment')}", "", field(item, "reasoning"), ""]
+        todo = field(item, "what_to_do")
+        if todo:
+            out += [f"*Do this:* {todo}", ""]
 
     out += ["## Before you launch", ""]
-    for i, item in enumerate(report["actions"], 1):
-        out.append(f"{i}. **{item['action']}** {item['rationale']}")
+    for i, item in enumerate(report.get("actions", []), 1):
+        out.append(f"{i}. **{field(item, 'action')}** {field(item, 'rationale')}")
 
     out += ["", "## What this survey cannot tell you", ""]
-    for gap in report["evidence_gaps"]:
+    for gap in report.get("evidence_gaps", []):
         out.append(f"- {gap}")
 
     out += ["", "---", "", "Generated from job output. Rerun to regenerate.", ""]
-    return "\n".join(out)
+    return flatten_punctuation("\n".join(out))
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("jobs", nargs="+", help="job directories to review")
-    parser.add_argument("--model", default="gemma4:31b-cloud")
+    parser.add_argument(
+        "--model",
+        default="gemma4:31b-cloud",
+        help="model name. Set ZAI_API_KEY to use z.ai instead of Ollama, "
+        "and pass something like glm-4.6 here.",
+    )
     parser.add_argument("--brief", help="product brief to give the reviewer as context")
     parser.add_argument("--out", default="report.md")
     parser.add_argument("--timeout", type=int, default=600)

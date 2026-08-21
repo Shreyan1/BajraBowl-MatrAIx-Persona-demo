@@ -47,11 +47,24 @@ Eight personas take about a minute. Saved output from every run in this repo is 
 
 I tried three and only one was usable.
 
-| Model | Per persona | Completed | What it did |
-|---|---|---|---|
-| `gemma4:31b-cloud` | ~8s | 7/8 | Spread across price positions. Income ordering is noisy. |
-| `gemma3:4b` | ~48s | 7/8 | Collapsed. Six of seven identical, and one persona flipped between runs. |
-| `qwen3:4b` | ~9 min | 0/2 | Times out. Burns the request budget on reasoning tokens before it emits JSON. |
+| Model | Where | 8 personas | Completed | What it did |
+|---|---|---|---|---|
+| `gemma4:31b-cloud` | Ollama cloud | **1m 01s** | 7/8 | Fast. Spread across price positions. One malformed answer. |
+| `glm-4.5-air` | z.ai | 6m 25s | 8/8 | Nothing failed. Writes about 4x the output tokens. |
+| `glm-4.6` | z.ai | ~18 min | 2/2 | Reasoning model. Reliable and far too slow to demo. |
+| `gemma3:4b` | local | ~6 min | 7/8 | Collapsed. Six of seven identical, unstable between runs. |
+| `qwen3:4b` | local | timeout | 0/2 | Burns the request budget on reasoning before emitting JSON. |
+
+Speed is what decides your demo. Only gemma4 finishes inside a minute, which is the difference between running it live and running it the night before. Both GLM models answer more carefully and neither is fast enough to sit through on stage, so demo on gemma4 and replicate on glm afterwards.
+
+To point the harness at z.ai instead of Ollama, nothing changes except two variables:
+
+```bash
+export OPENAI_API_KEY=$ZAI_API_KEY
+export OPENAI_BASE_URL=https://api.z.ai/api/paas/v4
+```
+
+One catch worth knowing. `glm-4.6` and `glm-4.5` are reasoning models, and the harness has no way to pass z.ai's `thinking: {"type": "disabled"}` flag, so they spend their budget thinking before answering. `glm-4.5-air` doesn't reason by default, which is why it's the one in the table above.
 
 The gemma3 failure is worth keeping as a slide. It had a low-income retiree calling Rs 79 a cup "fair, I'd buy regularly", which is exactly the kind of confident nonsense persona simulation is supposed to catch.
 
@@ -91,6 +104,28 @@ Pin income yourself:
   "age_bracket": ["18-24", "25-34", "35-44", "45-54", "55-64"]
 }
 ```
+
+## Run it twice and believe only the overlap
+
+This is the most useful thing in the repo, and I nearly missed it.
+
+The headline came from `gemma4:31b-cloud`. Running the same eight personas through `glm-4.5-air` gives a second opinion, and the two models disagree in a way that matters.
+
+| Signal | gemma4:31b | glm-4.5-air | Holds up |
+|---|---|---|---|
+| Won't buy at launch | 6/7 | 8/8 | Yes, stronger |
+| Health claim appeals | 5/7 | 5/8 | Yes |
+| Would buy it for an elder | 4/7 | 6/8 | Yes, stronger |
+| Price is the barrier | 3/7 only on offer | 8/8 only on offer | Direction holds |
+| Price centrality | 5 of 5 | 4 of 5 | Softens |
+| Can't justify against home cooking | 6/7 | 3/8 | Flips |
+| What triggers a first buy | Rs 199 trial pack, 5/7 | Doctor or family, 7/8 | Reverses |
+
+Both models agree the claim lands, the price kills it, and the buyer is a caregiver rather than the person on the pack. That is about as much confidence as two models can give you and it's the part worth acting on.
+
+The trial pack is another matter. On gemma4 it was the one thing that moved anybody, and I wrote it up as the obvious launch move. On glm it finishes last, beaten badly by a doctor or family recommendation. One of those models is wrong and this survey can't tell you which.
+
+Had I run only gemma4, I'd have handed a founder a confident recommendation built on nothing sturdier than one model's habits. Treat any recommendation that shows up on one model and not the other as untested.
 
 ## Four markets at once
 

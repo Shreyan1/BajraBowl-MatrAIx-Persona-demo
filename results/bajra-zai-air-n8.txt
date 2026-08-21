@@ -1,0 +1,36 @@
+Job: bajra-zai-air-n8
+App: survey
+Path: /Users/shreyanbr/Documents/Github/MatrAIx-Persona-8B/jobs/bajra-zai-air-n8
+Health: 8 trials · 8 ok · 0 error
+Primary: Question overall_interest: 3 62% · 2 38%
+Usage: 62,497 in · 12,333 out · 8,194 cache
+
+Distributions
+  Question overall_interest (n=8): 3=5, 2=3
+  Question q_channel_preference (n=8): quick_commerce=6, local_shop=2
+  Question q_health_claim_framing (n=8): claim_draws_me_in=5, claim_distrust=2, claim_irrelevant_to_me=1
+  Question q_homemade_substitution (n=8): worth_it_only_some_days=4, cannot_justify_the_gap=3, packaged_is_a_compromise=1
+  Question q_price_centrality (n=8): 4=6, 3=2
+  Question q_price_threshold (n=8): only_on_offer=8
+  Question q_purchase_target (n=8): for_elder_family_member=6, for_myself=2
+  Question q_trial_trigger (n=8): doctor_or_family_recommendation=7, trial_pack_199=1
+  Question would_buy_at_launch (n=8): false=8
+
+Metrics
+  Trials with answers: 8
+
+Trials
+  survey_bajra-bowl-d2c-launch__2Dxy96h · Nisha Iyer · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__2Dxy96h/artifacts/app/output/survey_result.json
+  survey_bajra-bowl-d2c-launch__DX9RiJS · Rohan Kapoor · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__DX9RiJS/artifacts/app/output/survey_result.json
+  survey_bajra-bowl-d2c-launch__MPaeKaR · Arjun Mehta · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__MPaeKaR/artifacts/app/output/survey_result.json
+  survey_bajra-bowl-d2c-launch__hcctkJX · Nisha Iyer · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__hcctkJX/artifacts/app/output/survey_result.json
+  survey_bajra-bowl-d2c-launch__igtzL3L · Priya Sharma · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__igtzL3L/artifacts/app/output/survey_result.json
+  survey_bajra-bowl-d2c-launch__ttCn5sX · Rohan Kapoor · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__ttCn5sX/artifacts/app/output/survey_result.json
+  survey_bajra-bowl-d2c-launch__vuSddqT · Anika Das · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__vuSddqT/artifacts/app/output/survey_result.json
+  survey_bajra-bowl-d2c-launch__ye9UtHg · Priya Sharma · reward=1 · ok · cost=- · survey_bajra-bowl-d2c-launch__ye9UtHg/artifacts/app/output/survey_result.json
+
+Notes
+  - Built from jobs/<job>/ on disk, no additional model calls.
+  - Ledger uses result.json; lens prefers verifier/structured_output.json.
+  - lens source: structured_output
+  - schema: MatraixJobResults.v1
