@@ -96,18 +96,29 @@ Pin income yourself:
 
 A market is a filter, so a market is a file. There's one per market sitting in `task/markets/`, you pick which one with `--strategy`, and each run writes to its own job directory so nothing collides.
 
-```bash
-for M in india uk us uae; do
-  uv run python application/scripts/generate_application_job.py \
-    --task application/tasks/survey_bajra-bowl-d2c-launch \
-    --strategy application/tasks/survey_bajra-bowl-d2c-launch/markets/$M.json \
-    --job-name bajra-$M --out configs/jobs/market-$M.yaml \
-    --model-name openai/gemma4:31b-cloud --seed 42
-done
+Build the job for one market:
 
-for M in india uk us uae; do
-  uv run matraix run -c configs/jobs/market-$M.yaml > /tmp/mkt-$M.log 2>&1 &
-done
+```bash
+uv run python application/scripts/generate_application_job.py \
+  --task application/tasks/survey_bajra-bowl-d2c-launch \
+  --strategy application/tasks/survey_bajra-bowl-d2c-launch/markets/uk.json \
+  --job-name bajra-uk --out configs/jobs/market-uk.yaml \
+  --model-name openai/gemma4:31b-cloud --seed 42
+```
+
+Then run it:
+
+```bash
+uv run matraix run -c configs/jobs/market-uk.yaml
+```
+
+Do the same for `india.json`, `us.json` and `uae.json`. If you want them going at the same time, the jobs are separate processes writing to separate directories, so you can just background each one and wait:
+
+```bash
+uv run matraix run -c configs/jobs/market-india.yaml &
+uv run matraix run -c configs/jobs/market-uk.yaml &
+uv run matraix run -c configs/jobs/market-us.yaml &
+uv run matraix run -c configs/jobs/market-uae.yaml &
 wait
 ```
 
@@ -123,6 +134,33 @@ Sixteen respondents across four markets, forty seconds, no exceptions. Against a
 The price objection is India-only. So is the health claim, which was the strongest hook in India and landed as irrelevant everywhere else.
 
 Now the part you have to say out loud before someone else does. The brief is written in rupees against Indian competition, and Rs 79 is about 75 pence, so a British respondent is reacting to a foreign number that reads as pocket change. This measures how people respond to an Indian product brief. It does not measure market entry. To do that properly you'd localise `input/context.md` per market and hold `questionnaire.yaml` fixed so the instrument stays comparable.
+
+### Where the files in task/markets came from
+
+Somebody always asks this, so here it is up front. I wrote them by hand.
+
+There's no tool in the repo that reads a country name and hands you back a cohort, and building one would be guesswork wearing a nicer coat. What I did instead was check every value I typed against `persona/schema/dimensions.json`, which is the schema the dataset is generated from. That matters more than it sounds like it should, because a filter value that doesn't exist matches nothing at all and doesn't complain about it. You get an empty cohort and no error.
+
+The `region` dimension has exactly ten legal values:
+
+```
+North America, Latin America, Western Europe, Eastern Europe,
+Sub-Saharan Africa, MENA, South Asia, East Asia,
+Southeast Asia, Oceania
+```
+
+Mapping a market onto one of those ten is a judgement call rather than a lookup. India becomes South Asia because nothing finer exists. The UK becomes Western Europe, which also holds France, Germany and Sweden. Dubai becomes MENA, a bucket running from Morocco to Iran, and that mapping is as rough as it looks.
+
+So: the structure is hand-written, the vocabulary is checked against the schema, and the numbers came out of the data afterwards. Cohort sizes in the tables above were counted off `sample/sample.parquet` and the build's published results, not estimated, which is exactly why they disagree with the calibration targets.
+
+One more piece of history worth having. These files originally stratified on `urbanicity`, and three of the four markets refused to run:
+
+```
+Incomplete stratify coverage: 'urbanicity=Dense urban' has 0,
+need sample_size_per_value_group=1
+```
+
+Urbanicity is filled for eleven of twelve South Asian adults in the dev sample and two of eighteen Western Europeans. The stratification I'd tuned against India was quietly wrong everywhere else, and the generator caught it before I did. I dropped the stratification and the files now sample at random inside their filters.
 
 ### Country targeting
 
